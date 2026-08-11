@@ -1,19 +1,21 @@
 ---
 name: update-prd-from-prototype
-description: Update or generate a Chinese table-style PRD from prototype screenshots, Axure/Figma exports, mind maps, or product-rule changes. Use when the user asks to create, supplement, revise, or polish a PRD while preserving or producing the structure `需求模块 / 原型截图 / 需求描述`, inserting real prototype screenshots, using dynamic numbered requirement descriptions, tracing every rule to current evidence, and keeping completeness checks internal.
+description: Update or generate a Chinese PRD from prototype screenshots, Axure/Figma exports, mind maps, or product-rule changes. Use when the user asks to create, supplement, revise, or polish requirements and needs to choose between a traditional `需求模块 / 原型截图 / 需求描述` three-column PRD and an integrated prototype-flow board containing screenshots, interaction arrows, and complete requirement cards. Trace every rule to current evidence and keep completeness checks internal.
 ---
 
 # Update PRD From Prototype
 
 ## Overview
 
-Use this skill to revise an existing PRD from fresh prototype evidence or a new product-rule clarification. If no source DOCX is provided, create a new table-style PRD from the supplied mind map and prototype images. Preserve the latest PRD as the source of truth when one exists, make targeted updates, and always produce a new versioned DOCX rather than overwriting.
+Use this skill to revise an existing PRD from fresh prototype evidence or a new product-rule clarification. Support two presentation modes: `三列表格模式` and `一体画板模式`. Resolve the mode before drafting, preserve the latest PRD as the source of truth when one exists, and make only targeted updates.
+
+Read `references/prd-output-modes.md` whenever creating a new PRD, changing its presentation mode, producing a Pencil board, or replacing a TAPD requirement table with a board image.
 
 For the family荣耀远征 / 守擂战 pattern, also read `references/family-glory-prd-pattern.md`.
 For guild/agent competitions or other complex Axure activities with multi-stage rankings, regional/global timing, live-room panels, invitation/assistance, or draws, treat `references/axure-activity-requirement-patterns.md` as the priority requirement reference. Reuse its completeness and interaction-writing patterns before considering looser generic patterns, but never inherit source-specific dates, thresholds, rank capacities, reward values, or frequency limits.
-For every activity-type PRD, also read `references/activity-prd-completeness.md`. Use it as a completeness audit inside the existing three-column rows; it must improve rule precision without changing the output structure `需求模块 / 原型截图 / 需求描述`.
-The activity checklist also covers pursuit battles, elimination tournaments, PK variants, free/paid gift packs, inventory, external activity integrations, activity-progress aggregation, startup pages, and home banners. Load only the matching checks and keep them internal.
-For the document-level heading structure of an activity PRD, also read `references/activity-prd-document-structure.md`. The default structure is `活动基础信息 → 活动对象 → 背景 → 思维导图 → 原型图 → 需求详情`; the three-column tables begin only under `需求详情`.
+For every activity-type PRD, also read `references/activity-prd-completeness.md`. Use it as an internal completeness audit inside the selected requirement surface; it must improve rule precision without forcing a presentation mode.
+The activity checklist also covers pursuit battles, elimination tournaments, PK variants, free/paid gift packs, inventory, external activity integration, activity-progress aggregation, startup pages, and home banners. Load only the matching checks and keep them internal.
+For the document-level heading structure of an activity PRD, also read `references/activity-prd-document-structure.md`. The document-level order remains `活动基础信息 → 活动对象 → 背景 → 思维导图 → 原型图 → 需求详情`; only the presentation inside `需求详情` changes by mode.
 
 <HARD-GATE>
 Treat completeness references as internal question checklists, never as product-rule sources.
@@ -23,6 +25,15 @@ Every statement written into the formal PRD must be traceable to one of these so
 Apply one user-confirmed standing default for gift-scoring activities: unless the current source explicitly excludes or changes a channel, activity-gift sending/receiving is counted across all supported room types (`多人房`, `单人房`, `永续房`), IM, and `贴吧` gift sending. Use these exact channel names in Chinese PRDs. Current-source exclusions override this default. For multi-person rooms, still resolve the sender/receiver role and whether score belongs to the sender or recipient.
 
 Before writing, build an internal evidence map with `module / proposed statement / source artifact / exact evidence / status`. Write only evidence-backed statements. If a missing decision changes eligibility, scoring, time, reward, inventory, budget, settlement, state transition, or interaction ownership, ask the user first and do not write a guessed rule into the PRD.
+
+Before drafting a new requirement detail or materially restructuring an existing one, resolve one presentation mode:
+
+- `三列表格模式`: module rows with `需求模块 / 原型截图 / 需求描述`.
+- `一体画板模式`: workflow-grouped prototype screenshots, operation-labelled arrows, and complete editable requirement cards on one Pencil board, with a downloadable board image when needed.
+
+If the user has not explicitly selected a mode and the requested change does not clearly preserve an existing mode, ask once and do not draft either format until answered. Never silently choose based on convenience. If the user explicitly requests both outputs, produce both from the same evidence map; otherwise keep one mode for the whole page-facing requirement scope.
+
+For `一体画板模式`, maintain one active master `.pen` file for the current requirement baseline. Back up the active file before material changes, then write the confirmed update back to the same master path. Do not leave `v2`, `v3`, `修正版`, or similarly named working boards in the active project root unless the user explicitly asks for parallel versions; move superseded variants to the project archive. A new formal state-count baseline may create one new master, but subsequent corrections stay in that master.
 
 For any zero-cost benefit such as a free gift pack, free lottery ticket, or free reward, treat anti-abuse as a module-level hard gate. If the current source does not define anti-abuse, ask the user to choose or provide controls before drafting that module. Present device, IP, anti-scalper blacklist, and malicious-refund blacklist only as options; never select them automatically. Paid-only benefits do not trigger this gate unless they also contain a free claim or zero-cost path.
 
@@ -38,6 +49,8 @@ Do not output an `异常说明`, `异常/限制`, `评审检查点`, `审核清�
 ## Workflow
 
 1. Ground in the latest artifact.
+   - Resolve and record `presentation_mode = three_column | integrated_board` before drafting. Ask: `这次需求详情用哪种呈现：三列表格，还是原型＋流程箭头＋需求卡的一体画板？`
+   - If the target is TAPD and `presentation_mode = integrated_board`, also resolve `image_insertion_owner = assistant | user`. If the user will insert the image, leave one blank paragraph beneath the retained subsection heading and do not upload a placeholder.
    - Open the user-provided DOCX first; do not assume an older generated file is current.
    - Locate affected rows by module names such as `守擂奖励 / 弹层`, `轮播入口资源位`, `皇城 PK 秒杀`, `后台配置`.
    - Inspect pasted/provided screenshots and identify whether they are full prototypes, cropped row references, or desired writing-format examples.
@@ -47,7 +60,7 @@ Do not output an `异常说明`, `异常/限制`, `评审检查点`, `审核清�
    - For gift-scoring modules, prefill the confirmed default channel coverage in the evidence map, then replace or narrow it only when the current source explicitly does so.
    - Resolve external activity integration, activity-progress aggregation, startup page, and home banner as four explicit yes/no decisions for every activity. Reuse current-source answers; otherwise ask once for the unresolved set before drafting.
    - Detect every free or zero-cost benefit path. If anti-abuse is unresolved, pause only the affected module, ask for the applicable controls and limits, and continue only after confirmation.
-   - If no DOCX exists, create a new PRD with a header/evidence section plus the table `需求模块 / 原型截图 / 需求描述`.
+   - If no source document exists, create the canonical document-level headings, then render `需求详情` in the selected mode.
    - For an activity PRD, first establish or normalize the top-level structure using `activity-prd-document-structure.md`. If activity audience, blacklist, or version rules are currently embedded in a requirement row, migrate them to the independent `活动对象` section, remove the duplicate table wording, and renumber later top-level headings without changing their content.
    - When updating an existing PRD/TAPD from a current prototype folder, compare the target document images against the latest state-image directory or user-confirmed screenshots before editing. Flag old images, missing states, unreadable combined images, wrong image order, and stale captions.
    - If the requested update is text-only and images are intentionally not changed, record that decision in the final response so reviewers know stale-looking images were left unchanged on purpose.
@@ -56,21 +69,26 @@ Do not output an `异常说明`, `异常/限制`, `评审检查点`, `审核清�
    - For a matching complex Axure activity, use this fixed analysis order before drafting: `whole-activity lifecycle` → `module/stage states` → `time basis` → `actor and data ownership` → `ranking dimension and snapshot behavior` → `display rules` → `complete interaction chains` → `reward delivery` → `message/notification triggers`.
    - Produce three compact internal working matrices before writing prose: `lifecycle/state`, `time + actor + ranking dimension`, and `interaction chain`. If invitations/assistance exist, also produce an internal invitation-state matrix. Leave an item unresolved when the source does not define it; do not convert a checklist cell into a product rule.
 
-2. Preserve the PRD shape.
-   - Keep the table format `需求模块 / 原型截图 / 需求描述` unless the user explicitly asks for a new structure.
-   - The three-column shape applies to the tables under `需求详情`, not to document-level metadata. Keep `活动基础信息`, `活动对象`, `背景`, `思维导图`, and `原型图` as independent content outside those tables.
-   - Treat this three-column table as the fixed final output shape. Put only confirmed product requirements into the relevant `需求描述` cells; do not expose the internal evidence map or completeness checklist, and do not expand the document into a separate generic multi-section PRD.
+2. Preserve the selected PRD shape.
+   - In `三列表格模式`, keep `需求模块 / 原型截图 / 需求描述` as the fixed page-facing requirement structure.
+   - In `一体画板模式`, keep page-facing requirements in the integrated board and do not also create a duplicate front-end three-column table unless the user explicitly requests both.
+   - The selected mode applies only under `需求详情`, not to document-level metadata. Keep `活动基础信息`, `活动对象`, `背景`, `思维导图`, and `原型图` independent.
+   - Put only confirmed product requirements into table cells or board requirement cards. Never expose the internal evidence map or completeness checklist.
    - Preserve existing screenshots, tables, headings, and backend configuration sections when the change is local.
    - Save a new output DOCX with a clear suffix such as `_补充奖励动态展示逻辑`, `_含轮播入口`, or `_补充xx逻辑`; do not overwrite the user’s latest source file.
-   - The `原型截图` column must contain actual images when prototype screenshots are available. Do not leave this column as text-only `原型截图建议`.
-   - For prototype overview boards, crop module/state-specific screenshots for each row when possible instead of repeatedly inserting the entire overview image.
+   - In `三列表格模式`, the `原型截图` column must contain actual images when available. Do not leave it as text-only `原型截图建议`; crop module/state-specific screenshots instead of repeatedly inserting the entire overview.
+   - In `一体画板模式`, retain each formal state image once, group related states into workflow rows, label arrows with visible operations or conditions, and place complete PRD cards beside their corresponding state groups. Do not put internal state IDs such as `打开31` or `返回14` in user-visible requirement prose; use page and state names.
+   - Treat module grouping, state transition, identity ownership, and time-phase eligibility as different relationships. Use arrows only for a confirmed transition or visible operation. Use labelled bands or brackets for mutually exclusive identities, time phases, or rotating-set membership; do not connect mutually exclusive states as if users always traverse them in sequence.
+   - Cross-image arrows are allowed when accurate. Route each branch on its own lane, keep the label bounding box at least 10px away from the line, arrowhead, and image area, place arrow nodes above image nodes, and read back the board at overview and close zoom. Run a geometric collision check during generation instead of relying only on visual estimation. If Pencil does not reliably render a path arrowhead, use a native line or rectangle plus a large text arrow glyph; do not accept an export-only arrow that disappears in the editable board.
+   - Keep requirement cards dynamically sized from actual content. Do not use fixed heights that clip lines, and do not shrink body text merely to meet a canvas-height target.
    - For TAPD rich-text updates, preserve existing `/tfl/captures/...` images outside the target section. Upload/replace only the intended images, and after update verify no `data:image` remains in the saved description.
    - If a change affects玩法结构,核心逻辑,交互链路, or a batch of screenshots, update the top version-record table unless the user explicitly says not to. Keep the version row high-level: what changed, what is now synchronized, and whether PRD/TAPD/prototype/big board were changed. When the user names a target version, merge the change into that version and never auto-increment beyond it.
    - If the user asks to highlight updates, confirm the intended scope first. Unless they specify otherwise, apply light-yellow highlighting only to text added or changed in the current update; do not color entire rows, screenshots, or unchanged copy.
 
 3. Update the affected module only.
-   - Replace or append text in the relevant `需求描述` cell.
-   - Use dynamic numbering and include only sections that contain real, source-backed requirements. Typical section labels are:
+   - In `三列表格模式`, replace or append text in the relevant `需求描述` cell.
+   - In `一体画板模式`, replace or append text only in the corresponding workflow requirement card and update arrows only when the confirmed interaction chain changes.
+   - Use dynamic numbering in table cells or board cards and include only sections that contain real, source-backed requirements. Typical section labels are:
      - `1. 页面说明：...`
      - `i. ...`
      - `ii. ...`
@@ -134,6 +152,8 @@ Do not output an `异常说明`, `异常/限制`, `评审检查点`, `审核清�
    - Confirm `data:image=0` after readback and `/tfl/captures/` image count did not decrease unless the user explicitly asked to delete images.
    - For screenshot updates, confirm each target section has the expected number of images and labels, and that newly uploaded images converted from base64/data URIs into `/tfl/captures/...`.
    - Compare before/after image sources and require the changed-image count to match the intended replacement list. Verify both the top prototype overview and the `需求详情` row screenshots when the user expects both surfaces to stay current.
+   - When converting `三列表格模式` to `一体画板模式`, preserve the `六、需求详情` and `● 活动页面与玩法需求` headings; replace only the front-end table immediately below that heading. Preserve `● 后台配置需求` and its table unless the user explicitly includes them in the conversion.
+   - If `image_insertion_owner = user`, leave exactly one blank paragraph at the insertion point and verify the target table is absent. If `image_insertion_owner = assistant`, upload the board through TAPD so the saved HTML uses `/tfl/captures/...`, not `data:image`.
    - Run a requirement-surface matrix after update: `原型图/顶部总览/需求详情截图`, `展示逻辑`, `交互逻辑`, `数据口径`, `发奖/结算`, `后台配置`, and `版本记录`. Mark each as changed, intentionally unchanged, or not applicable; do not assume one updated surface implies the others were synchronized.
    - For version-record updates, confirm the intended version row exists exactly once and that older rows were not rewritten unless explicitly requested.
    - In the final reply, state what changed, what was intentionally not changed, the readback/structural checks that passed, and the backup path when one was created.
@@ -153,6 +173,15 @@ Do not output an `异常说明`, `异常/限制`, `评审检查点`, `审核清�
 - If a row covers multiple states, crop a band containing those states; if the band becomes unreadable, insert two smaller screenshots in the same cell.
 - Keep a short caption above each inserted screenshot, such as `神迹寻秘-遗迹详情三态`.
 - Preserve existing inserted screenshots when only copy/rules change.
+
+## Integrated Board Delivery
+
+- Keep one editable master board and one recommended distribution image in the active delivery surface.
+- Export the full-resolution PNG first. If it exceeds the requested limit, create a same-dimension optimized PNG with `python3 scripts/optimize_share_png.py <input.png> <output.png> --target-bytes 4900000`.
+- Prefer the highest palette size that meets the target. Treat the optimized file as a share copy; retain or archive the lossless original.
+- Verify output width and height equal the input, actual bytes are within the limit, and requirement text remains readable. A successful compression command without visual inspection is not delivery.
+- Provide focused QA crops for dense rows, but never replace the complete board with only crops.
+- Verify the editable board itself, not only a custom renderer: every arrow, label, requirement card, and image reference must remain visible and correctly layered in Pencil.
 
 ## Configurable Value Policy
 
@@ -190,6 +219,6 @@ Return only the final user-facing file links and a short summary:
 - what validation passed
 - any render limitation
 
-The final PRD remains a three-column table: `需求模块 / 原型截图 / 需求描述`. The added completeness standard changes the precision and coverage of the content, not the presentation format.
+Return the selected output: either the traditional three-column PRD or the integrated board. Both modes must contain the same evidence-backed requirement completeness; the difference is presentation, not rule depth.
 
 After delivering the PRD draft, ask whether the user wants a Requirements Skill Suite review. Do not start that review without explicit approval.

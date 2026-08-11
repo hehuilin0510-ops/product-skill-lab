@@ -9,6 +9,12 @@ description: Generate complete low-fidelity activity prototype image sets from a
 
 Generate complete activity prototype image sets, not only version-management artifacts. Start from the activity plan and produce a confirmed page/state blueprint before generating images. All single-state prototype PNGs must be generated or regenerated with image2, including main pages, popups, masks, dropdowns, banners, icons, ranking cards, reward cells, and revised UI regions. "Source-image-native reconstruction" means image2 using a confirmed source image as the baseline; it does not mean drawing the UI with code. Use scripts only for deterministic document initialization, checks, board stitching, file organization, size optimization, and QA boards. Never script-paint, canvas-draw, HTML/CSS-render, SVG-draw, PIL-compose, cover, patch, or manually paste the main UI or any single-state PNG content. If any visible semantic UI changes, regenerate the whole affected state with image2 from a clean source/baseline; do not paste a partial replacement over the old state.
 
+<HARD-GATE>
+- Lock activity-gift display names before generation. If a gift's formal name is not confirmed, label it consistently as `活动礼物A`, `活动礼物B`, and so on; never invent a plausible formal name. Keep the gift count evidence-based rather than defaulting to two. After a formal name is confirmed, replace the placeholder across the blueprint, prompts, state-image copy, and handoff text, then reject any stale placeholder or former name.
+- Keep one confirmed activity-header region at the top of every activity state PNG. Reuse the same header title, key visual, dimensions, and placement across tabs, detail pages, rankings, and other states. This is a shared region inside every state, not a separate header-state image. Popup and dropdown states must use a clean parent page that already contains the approved header; a normal popup may dim or partially cover it only through the recorded mask/layer behavior.
+- Define one project/version reward-placeholder manifest with six categories: `礼物`, `头像框`, `徽章/勋章`, `金豆/金币`, `积分`, and `通用奖励`. Use the matching category asset for each unresolved reward; use `通用奖励` only when the category itself is unknown. Reuse the same source asset and sizing rule everywhere within a category. Generate placeholder art with image2 or use user-approved source assets; never script-draw it. When formal reward art arrives, replace the affected category instances and reject stale placeholders.
+</HARD-GATE>
+
 ## Default Deliverables
 
 Every complete run should produce:
@@ -49,12 +55,13 @@ If the user asks for a quick draft, still create `prototype_blueprint.md`, `mind
 
 1. **Read the activity input**
    - Gather activity plan text, gameplay rules, reward structures, ranking logic, reference images, previous version folders, user-provided `mindmap.md`, and style constraints.
+   - Resolve the activity-gift count and names, the shared activity-header source, and the reward categories present in the project. Record unresolved gift names with the fixed `活动礼物A/B/...` labels instead of inventing names.
    - If the user provides `mindmap.md`, use it as the primary gameplay-structure source and derive `prototype_blueprint.md` from it plus the activity plan.
    - If references are insufficient, proceed with a low-fidelity draft and label it as not a high-similarity reconstruction.
 
 2. **Create the blueprint first**
    - Write `prototype_blueprint.md` before batch image generation.
-   - Include activity overview, module order, page/state list, popup/exception states, state numbers, filenames, page purpose, source/baseline, and interaction flow.
+   - Include activity overview, activity-gift name map, shared activity-header source/invariants, reward-placeholder asset manifest, module order, page/state list, popup/exception states, state numbers, filenames, page purpose, source/baseline, and interaction flow.
    - Also write `mindmap.md` as a human-readable gameplay mind map for module structure, user flow, rewards, rankings, popups, and exception states, unless the user already provided one.
    - Read `references/activity_blueprint_template.md`, `references/page_taxonomy.md`, `references/state_generation_rules.md`, and `references/recent_lessons.md` while drafting.
    - For guild/agent competitions or complex Axure activities with multi-stage rankings, regional/global states, live-room panels, draws, or invitation/assistance flows, treat `references/axure-activity-visual-patterns.md` as the priority state-coverage and board-composition reference. Reuse its structural and visual grammar, but do not inherit source-specific dates, thresholds, reward values, advancement counts, or frequency limits.
@@ -67,6 +74,7 @@ If the user asks for a quick draft, still create `prototype_blueprint.md`, `mind
 4. **Initialize project docs**
    - After blueprint confirmation, create or update `display_order.md`, `prompts.md`, `global_rules.md`, `project_rules.md`, `version_rules.md`, `qa_gate.md`, and `handoff_summary.md`.
    - Use `scripts/init_project_docs.py` when the blueprint follows the template.
+   - Record the confirmed activity-gift name map, shared activity-header source/title/key visual/dimensions/placement, and six-category reward-placeholder manifest in `project_rules.md`. Carry version-specific replacements or overrides into `version_rules.md` without changing unrelated state numbering.
    - Before image generation, define a project-level popup mask token in `project_rules.md` and `version_rules.md`: color, opacity, blur/dim treatment, dialog shadow, close/confirm control style, and the source state it was copied from. If no approved source exists, use one explicit default for the whole version (`#000000` at `55%` opacity, no blur) and record it before the first popup. Do not let individual states invent their own mask color or opacity.
 
 5. **Generate state PNGs with image2**
@@ -88,7 +96,8 @@ If the user asks for a quick draft, still create `prototype_blueprint.md`, `mind
    - Rule and instruction popups (`规则弹窗` / `说明弹窗`) should use the top-right close control only. Do not add a bottom `OK`/confirm button unless the user explicitly requests a confirmation action.
    - Treat black dirty shadows (`黑影`), hard masks, white blocks, pasted patches (`贴片`), ghost text, old list remnants, stale popup content, and old content remnants (`旧内容残留`) as blockers. Regenerate instead of covering them.
    - Treat date dropdowns, level dropdowns, and filter menus as lightweight floating layers (`下拉浮层`): they may cover ranking rows or content areas, but they must not receive an extra heavy modal mask and must not show black dirty edges, pasted borders, or old content remnants.
-   - Reuse shared source assets for repeated reward placeholders, gift icons, and reward grid cells within the same project/version. Do not redraw a new placeholder icon for every popup or board cell.
+   - Keep the approved activity header inside every generated state. Use the same title, key visual, dimensions, and placement across the full state set; popup/floating-layer states must inherit it from the clean parent page instead of redrawing or cropping it away.
+   - Reuse the six-category reward-placeholder manifest for reward slots, result popups, reward tables, ranking rewards, and detail pages. Reuse one asset and sizing rule within each category; use `通用奖励` only when the category is unknown.
    - If a business element's module ownership or display form is unclear, ask the user before generating. Do not guess for entries, rewards, rankings, or record fields.
    - Read `references/image2_generation_guide.md` for visual-generation rules.
 
@@ -106,7 +115,9 @@ If the user asks for a quick draft, still create `prototype_blueprint.md`, `mind
    - Compare every promoted image2 candidate against its clean baseline and request checklist. Confirm all required changes are visible and all explicitly retained controls, fields, rows, sticky areas, tabs, and rewards remain present. A visually attractive output that deletes retained business fields is a failed candidate.
    - Reject final state PNGs with partial pasted replacements, pasted text strips, overlaid icons, covered buttons, or patched popup/mask regions. Only review-only annotations may be pasted, and they must live outside the final state set.
    - Inspect rule/instruction popups for close behavior: they should not show bottom `OK` buttons by default.
-   - Inspect repeated reward placeholders and reward grid cells for asset consistency. If the same reward-placeholder role appears across states, it should use the same shared asset and sizing rules.
+   - Inspect gift-name consistency across state images and text artifacts. Reject invented formal gift names, stale `活动礼物A/B/...` labels after confirmation, or multiple names for the same gift slot.
+   - Inspect every state for the approved activity header. Reject missing, cropped, shifted, renamed, or independently redrawn headers; for popup states, confirm the clean parent page still contains the header underneath the mask.
+   - Inspect repeated reward placeholders and reward grid cells by category. The same category must use the same shared asset and sizing rules, and an unresolved category must use the recorded `通用奖励` asset.
    - Verify the root folder is clean, final files are under `00_最终交付`, state PNG count is correct under `01_状态图_xx张`, and HTML still resolves images.
    - Verify the main big board uses original state dimensions in an 8-column layout; do not deliver a thumbnail/compressed board as the main board.
    - Before the final reply, directly show the changed single-state image or focused QA image and the rebuilt main big-board PNG. A file path or HTML link alone does not prove that the image2 result was promoted into the board.
