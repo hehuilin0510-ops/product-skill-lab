@@ -45,5 +45,16 @@
     async function loadDownloadCounts(){try{const response=await fetch("https://api.github.com/repos/hehuilin0510-ops/product-skill-lab/releases/latest",{headers:{Accept:"application/vnd.github+json"}});if(!response.ok)throw new Error("release unavailable");const release=await response.json();Object.values(skills).forEach(skill=>{const asset=release.assets.find(item=>item.name===skill.zip);if(asset){skill.downloads=asset.download_count+skill.offset;skill.zip=asset.browser_download_url}});document.getElementById("latest-release").href=release.html_url;document.getElementById("count-prototype").textContent=countText(skills.prototype.downloads);document.getElementById("count-prd").textContent=countText(skills.prd.downloads);render(current)}catch(error){console.info("Download counts are temporarily unavailable.")}}
     document.querySelectorAll("[data-skill]").forEach(b=>b.addEventListener("click",()=>render(b.dataset.skill)));document.getElementById("copy").addEventListener("click",async e=>{await navigator.clipboard.writeText(skills[current].install);e.currentTarget.textContent="已复制 ✓";setTimeout(()=>e.currentTarget.textContent="复制用法",1600)});render(current);loadDownloadCounts();
   </script>
+  <script>
+    // v1.4.0 public release metadata override
+    skills.prototype.updated="2026.08.13 更新";
+    skills.prd.version="v1.4.0"; skills.prd.updated="2026.08.13 更新";
+    const publicReleaseNotesV140='<article class="release-item"><time>2026.08.13</time><div><h3>双 Skill 更新 · v1.4.0</h3><ul><li>活动原型生成公开包同步复核并保留礼物命名、统一头图、六类奖励占位和 QA 规则。</li><li>原型驱动 PRD 新增唯一当前交付入口与固定编号目录结构。</li><li>强化 Pencil 主文件与图片依赖的成套管理，避免 Missing dependencies。</li><li>新增重复主文件、散落依赖、旧导出和多份 latest 目录的交付阻断项。</li><li>两个公开下载包均补充中文 README。</li></ul><span class="tag">LATEST UPDATE</span></div></article>';
+    document.querySelectorAll(".tabs .update-badge")[0].textContent="NEW · v1.2.0";
+    document.querySelectorAll(".tabs .update-badge")[1].textContent="NEW · v1.4.0";
+    render("prototype");
+    const v140ReleaseList=document.querySelector(".release-list");
+    if(v140ReleaseList&&!v140ReleaseList.dataset.v140){v140ReleaseList.insertAdjacentHTML("afterbegin",publicReleaseNotesV140);v140ReleaseList.dataset.v140="true";}
+  </script>
 </body>
 </html>

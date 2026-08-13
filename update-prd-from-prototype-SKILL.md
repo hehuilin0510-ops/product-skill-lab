@@ -35,6 +35,12 @@ If the user has not explicitly selected a mode and the requested change does not
 
 For `一体画板模式`, maintain one active master `.pen` file for the current requirement baseline. Back up the active file before material changes, then write the confirmed update back to the same master path. Do not leave `v2`, `v3`, `修正版`, or similarly named working boards in the active project root unless the user explicitly asks for parallel versions; move superseded variants to the project archive. A new formal state-count baseline may create one new master, but subsequent corrections stay in that master.
 
+For Pencil-based PRD delivery, use one current entry only: `00_最终交付/请使用_最新交付/最终交付包`. Keep its top-level order fixed as: `01_Pencil源文件与图片依赖` → `02_完整高清原图_不限大小` → `03_推荐分享_5MB内` → `04_备用分享_PNG_5MB内` → `05_快速预览` → `06_模块高清分图` → `07_QA检查图` → `README_交付说明.md`.
+
+Treat `01_Pencil源文件与图片依赖` as an inseparable bundle. It must contain exactly one active `.pen` source, its `01_状态图_46张` folder, every `screenshot-site*.png` asset, and all other images referenced by the `.pen`. Do not delete, rename, move, or split these dependencies independently. Before handoff, resolve every image URL relative to the `.pen` bundle and verify that every referenced file exists; otherwise Pencil may show `Missing dependencies` and images may disappear.
+
+Do not leave duplicate active `.pen` files, loose state images, loose screenshot dependencies, or multiple active “latest” folders. Move superseded versions, old exports, and root-level build outputs into `00_最终交付/历史备份/<timestamp>` instead of mixing them with the current package or silently deleting them.
+
 For any zero-cost benefit such as a free gift pack, free lottery ticket, or free reward, treat anti-abuse as a module-level hard gate. If the current source does not define anti-abuse, ask the user to choose or provide controls before drafting that module. Present device, IP, anti-scalper blacklist, and malicious-refund blacklist only as options; never select them automatically. Paid-only benefits do not trigger this gate unless they also contain a free claim or zero-cost path.
 
 Before drafting any activity PRD, resolve whether it integrates with each of these four capabilities: external activity integration, activity-progress aggregation, startup page, and home banner. Treat an explicit yes/no in the current source as resolved. If any are absent, ask about all unresolved capabilities in one compact round. Do not infer an integration or write its behavior without confirmation.
@@ -177,11 +183,16 @@ Do not output an `异常说明`, `异常/限制`, `评审检查点`, `审核清�
 ## Integrated Board Delivery
 
 - Keep one editable master board and one recommended distribution image in the active delivery surface.
+- Write all current artifacts into the canonical `00_最终交付/请使用_最新交付/最终交付包`; do not create a second active delivery folder.
+- Preserve the fixed top-level order `01_Pencil源文件与图片依赖` through `07_QA检查图`, followed by `README_交付说明.md`.
+- Keep the `.pen`, `01_状态图_46张`, `screenshot-site*.png`, and all `.pen` image dependencies together inside `01_Pencil源文件与图片依赖`; validate all relative paths before sharing.
 - Export the full-resolution PNG first. If it exceeds the requested limit, create a same-dimension optimized PNG with `python3 scripts/optimize_share_png.py <input.png> <output.png> --target-bytes 4900000`.
 - Prefer the highest palette size that meets the target. Treat the optimized file as a share copy; retain or archive the lossless original.
 - Verify output width and height equal the input, actual bytes are within the limit, and requirement text remains readable. A successful compression command without visual inspection is not delivery.
 - Provide focused QA crops for dense rows, but never replace the complete board with only crops.
 - Verify the editable board itself, not only a custom renderer: every arrow, label, requirement card, and image reference must remain visible and correctly layered in Pencil.
+- After each delivery, read back the final directory tree, confirm the `.pen` dependency-resolution check has zero missing assets, and directly inspect the `.pen` plus exported board/QA images for overflow, overlap, clipping, stale exports, readability, and image completeness.
+- Set the delivery folder's Finder view to icon view, arrange by name, and snap to grid so the visible order follows the numbered folders. Finder sorting is presentation hygiene only and must never be achieved by moving Pencil dependency assets out of their bundle.
 
 ## Configurable Value Policy
 
