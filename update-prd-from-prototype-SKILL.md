@@ -14,7 +14,7 @@ Read `references/prd-output-modes.md` whenever creating a new PRD, changing its 
 For the family荣耀远征 / 守擂战 pattern, also read `references/family-glory-prd-pattern.md`.
 For guild/agent competitions or other complex Axure activities with multi-stage rankings, regional/global timing, live-room panels, invitation/assistance, or draws, treat `references/axure-activity-requirement-patterns.md` as the priority requirement reference. Reuse its completeness and interaction-writing patterns before considering looser generic patterns, but never inherit source-specific dates, thresholds, rank capacities, reward values, or frequency limits.
 For every activity-type PRD, also read `references/activity-prd-completeness.md`. Use it as an internal completeness audit inside the selected requirement surface; it must improve rule precision without forcing a presentation mode.
-The activity checklist also covers pursuit battles, elimination tournaments, PK variants, free/paid gift packs, inventory, external activity integration, activity-progress aggregation, startup pages, and home banners. Load only the matching checks and keep them internal.
+The activity checklist also covers pursuit battles, elimination tournaments, PK variants, free/paid gift packs, inventory, 外部活动联动, activity-progress aggregation, startup pages, and home banners. Load only the matching checks and keep them internal.
 For the document-level heading structure of an activity PRD, also read `references/activity-prd-document-structure.md`. The document-level order remains `活动基础信息 → 活动对象 → 背景 → 思维导图 → 原型图 → 需求详情`; only the presentation inside `需求详情` changes by mode.
 
 <HARD-GATE>
@@ -43,7 +43,7 @@ Do not leave duplicate active `.pen` files, loose state images, loose screenshot
 
 For any zero-cost benefit such as a free gift pack, free lottery ticket, or free reward, treat anti-abuse as a module-level hard gate. If the current source does not define anti-abuse, ask the user to choose or provide controls before drafting that module. Present device, IP, anti-scalper blacklist, and malicious-refund blacklist only as options; never select them automatically. Paid-only benefits do not trigger this gate unless they also contain a free claim or zero-cost path.
 
-Before drafting any activity PRD, resolve whether it integrates with each of these four capabilities: external activity integration, activity-progress aggregation, startup page, and home banner. Treat an explicit yes/no in the current source as resolved. If any are absent, ask about all unresolved capabilities in one compact round. Do not infer an integration or write its behavior without confirmation.
+Before drafting any activity PRD, resolve whether it integrates with each of these four capabilities: 外部活动联动, activity-progress aggregation, startup page, and home banner. Treat an explicit yes/no in the current source as resolved. If any are absent, ask about all unresolved capabilities in one compact round. Do not infer an integration or write its behavior without confirmation.
 
 Keep negative integration confirmations internal by default. Do not create a generic `关联能力` section listing capabilities that are not connected. Write a confirmed integration into the PRD only when it is enabled and has product behavior to specify, or write an explicit non-integration only when the current document has a dedicated scope/configuration row or the user asks to record it.
 
@@ -51,6 +51,23 @@ Treat `活动对象`, general blacklist logic/list/IDs, and global version eligi
 
 Do not output an `异常说明`, `异常/限制`, `评审检查点`, `审核清单`, or internal validation section merely to satisfy a template. Include an exception, failure, restriction, or fallback only when the current source or the user explicitly defines it. Keep completeness, review, and validation checks internal rather than exposing them to development or QA readers.
 </HARD-GATE>
+
+### Integrated-board geometry and arrow gate
+
+Run this geometry pass internally before exporting any Pencil integrated board; do not copy the checklist into page-facing requirement cards.
+
+- Size each requirement card from the measured wrapped line count, font size, line height, section spacing, and padding. Never use a fixed height that clips text, creates an isolated punctuation line, lets later sections cover earlier sections, or cuts off the bottom of the card. If content does not fit, increase the card height or split it into related cards; never shrink body text until it becomes unreadable.
+- Build a collision matrix for every screenshot, requirement card, arrow line, arrowhead, and arrow label. Any unintended overlap, covering, clipping, out-of-board placement, or label touching a line/card/image is a blocker. Keep at least 10px clearance between an arrow label and its line, arrowhead, screenshot, or requirement card.
+- A page-interaction arrow must originate from the actual page, screen, button, tab, or visible control that the user operates. A requirement card describes the rule and is not an interaction-arrow source unless the user explicitly requests a documentation-only relation.
+- When source and target pages are not adjacent, route the interaction through a dedicated top or bottom cross-arrow lane: source page/control → vertical segment → horizontal segment through clear space → vertical segment with arrowhead into the target page/group. Do not use a short arrow beside a logic card to stand in for a page transition, and do not route arrows through screenshots or text cards.
+- After deterministic checks, inspect the editable `.pen` at overview and close zoom, then inspect focused QA crops for every changed card and arrow. A clean export alone is insufficient if the editable board still contains overlap, covered content, a detached arrowhead, or a semantic source/target mismatch.
+
+### Prototype-visual to requirement-logic synchronization gate
+
+- When a prototype revision adds or changes a visible data-bearing or clickable element, update the corresponding requirement card in the same change. Common examples include ranking status badges, `LIVE` markers, fan/user avatars, reward entries, tabs, switches, buttons, and conditional information blocks.
+- For each such element, write only evidence-backed rules covering the applicable surface and scope, display/hidden condition, data definition or ranking dimension, click destination, state-dependent branch, and return-state preservation. Do not infer unsupported settlement, reward, backend, or fallback behavior.
+- Replacing the screenshot or image reference alone is incomplete. Before delivery, read back the saved Pencil requirement card through Pencil export or another editable-board readback and confirm the new interaction keywords are present; then verify the rebuilt board uses that saved card rather than an older renderer snapshot.
+- If the visual edit is cosmetic only, do not manufacture interaction logic. If a removed feature no longer exists, keep the formal card focused on retained behavior instead of adding negative filler about the deleted feature.
 
 ## Workflow
 
@@ -64,7 +81,7 @@ Do not output an `异常说明`, `异常/限制`, `评审检查点`, `审核清�
    - Build the internal evidence map before drafting. Record the exact source for each proposed rule and mark unsupported completeness-check findings as questions, not PRD content.
    - Apply source priority consistently: explicit user correction/confirmation → latest PRD → explicit rule document or mind map → current prototype evidence. Use older files and bundled patterns only to detect conflicts or gaps.
    - For gift-scoring modules, prefill the confirmed default channel coverage in the evidence map, then replace or narrow it only when the current source explicitly does so.
-   - Resolve external activity integration, activity-progress aggregation, startup page, and home banner as four explicit yes/no decisions for every activity. Reuse current-source answers; otherwise ask once for the unresolved set before drafting.
+   - Resolve 外部活动联动, activity-progress aggregation, startup page, and home banner as four explicit yes/no decisions for every activity. Reuse current-source answers; otherwise ask once for the unresolved set before drafting.
    - Detect every free or zero-cost benefit path. If anti-abuse is unresolved, pause only the affected module, ask for the applicable controls and limits, and continue only after confirmation.
    - If no source document exists, create the canonical document-level headings, then render `需求详情` in the selected mode.
    - For an activity PRD, first establish or normalize the top-level structure using `activity-prd-document-structure.md`. If activity audience, blacklist, or version rules are currently embedded in a requirement row, migrate them to the independent `活动对象` section, remove the duplicate table wording, and renumber later top-level headings without changing their content.
@@ -124,6 +141,7 @@ Do not output an `异常说明`, `异常/限制`, `评审检查点`, `审核清�
    - For modal-only controls such as `活动规则`, `祈福规则`, `抽奖说明`, and reward previews, state that they are read-only popups if applicable and do not trigger settlement, reward delivery, draw/prayer/search actions, or progress changes.
    - For complex interaction updates, create or embed a compact interaction-chain matrix in the affected section when prose would be ambiguous. Use columns like `入口/按钮`, `所在页面`, `点击后打开`, `默认定位`, `关闭/返回`, and `是否改变筛选/进度/结算`.
    - When removing a clickable affordance, update both sides explicitly: `2. 展示规则` must state what remains visible and what no longer appears; `3. 交互说明` must state which click path was removed and which confirmed path remains. Replacing a screenshot alone does not count as updating display logic or interaction logic.
+   - For a removal request, keep the formal requirement focused on retained behavior and the confirmed replacement path. Do not add negative filler such as “不会展示已删除弹窗” unless the user explicitly asks for that statement to remain.
 
 4. Keep facts, inferred logic, and open points clean.
    - Treat explicit user corrections as source of truth.
