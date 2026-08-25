@@ -71,5 +71,20 @@
     const v150ReleaseList=document.querySelector(".release-list");
     if(v150ReleaseList&&!v150ReleaseList.dataset.v150){v150ReleaseList.querySelectorAll(".tag").forEach(tag=>{if(tag.textContent==="LATEST UPDATE")tag.textContent="HISTORY"});v150ReleaseList.insertAdjacentHTML("afterbegin",publicReleaseNotesV150);v150ReleaseList.dataset.v150="true";}
   </script>
+  <script>
+    // v1.6.0 public release metadata override
+    skills.prototype.version="v1.6.0"; skills.prototype.updated="2026.08.25 更新";
+    skills.prototype.desc="先确认页面与状态蓝图，再按变更范围使用 Image2 生成完整状态图。新版强化生成结果物化、本地文件可见性检查和候选图晋级顺序，避免未落盘结果进入正式交付。";
+    skills.prototype.steps=["读懂活动方案","判断变更范围","Image2 生成状态","保存真实候选图","尺寸与视觉 QA","晋级并交付"];
+    skills.prd.version="v1.6.0"; skills.prd.updated="2026.08.25 更新";
+    skills.prd.desc="从最新原型、脑图或规则变更出发，用证据映射更新 PRD。新版强化直播间展示触发、玩法时间基准、奖励面板确认和统一画板全尺寸交付标准。";
+    skills.prd.steps=["读取最新证据","确认交付模式","确认时间与展示规则","检查面板与画板","回读保存结果","QA 并交付"];
+    const publicReleaseNotesV160='<article class="release-item"><time>2026.08.25</time><div><h3>双 Skill 更新 · v1.6.0</h3><ul><li>活动原型生成新增 Image2 结果物化恢复和本地文件可见性检查。</li><li>原型驱动 PRD 强化直播间展示触发、玩法时间基准和奖励面板展示确认。</li><li>一体画板新增统一全尺寸交付标准，默认 11600px 宽，8192px 导出仅作预览。</li><li>两套 Skill 均强化交付前回读和公开包结构检查。</li></ul><span class="tag">LATEST UPDATE</span></div></article>';
+    document.querySelectorAll(".tabs .update-badge")[0].textContent="NEW · v1.6.0";
+    document.querySelectorAll(".tabs .update-badge")[1].textContent="NEW · v1.6.0";
+    render("prototype");
+    const v160ReleaseList=document.querySelector(".release-list");
+    if(v160ReleaseList&&!v160ReleaseList.dataset.v160){v160ReleaseList.querySelectorAll(".tag").forEach(tag=>{if(tag.textContent==="LATEST UPDATE")tag.textContent="HISTORY"});v160ReleaseList.insertAdjacentHTML("afterbegin",publicReleaseNotesV160);v160ReleaseList.dataset.v160="true";}
+  </script>
 </body>
 </html>
