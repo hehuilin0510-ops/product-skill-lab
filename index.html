@@ -86,5 +86,20 @@
     const v160ReleaseList=document.querySelector(".release-list");
     if(v160ReleaseList&&!v160ReleaseList.dataset.v160){v160ReleaseList.querySelectorAll(".tag").forEach(tag=>{if(tag.textContent==="LATEST UPDATE")tag.textContent="HISTORY"});v160ReleaseList.insertAdjacentHTML("afterbegin",publicReleaseNotesV160);v160ReleaseList.dataset.v160="true";}
   </script>
+  <script>
+    // v1.7.0 GPT-5 / GPT-6 compatibility update
+    skills.prototype.version="v1.7.0"; skills.prototype.updated="2026.09.07 更新";
+    skills.prototype.desc="从完整活动或现有状态出发，按请求选择完整生产、局部更新或交付恢复。新版面向 GPT-5 与 GPT-6 优化执行顺序，减少重复确认、无关重做和过度验证。";
+    skills.prototype.steps=["判断工作路径","复用已确认基准","锁定受影响状态","Image2 生成或恢复","聚焦视觉 QA","更新相关交付"];
+    skills.prd.version="v1.7.0"; skills.prd.updated="2026.09.07 更新";
+    skills.prd.desc="从最新原型、脑图或规则变更出发，用证据映射更新 PRD。新版自动沿用现有格式，先完成明确范围，只集中询问真正影响业务边界的决策。";
+    skills.prd.steps=["读取当前证据","继承现有格式","锁定目标范围","集中确认阻塞项","更新目标模块","聚焦回读交付"];
+    const publicReleaseNotesV170='<article class="release-item"><time>2026.09.07</time><div><h3>GPT-5 / GPT-6 兼容优化 · v1.7.0</h3><ul><li>两套 Skill 新增跨模型执行策略：用户指令优先，先完成明确工作，再集中询问真实阻塞项。</li><li>活动原型生成新增完整生产、局部更新、交付恢复三种路径，避免小改动触发整套重做。</li><li>原型驱动 PRD 自动继承现有呈现模式，小改动只更新目标模块并做聚焦回读。</li><li>QA 与检查清单按变更范围执行，减少重复确认和过度验证。</li></ul><span class="tag">LATEST UPDATE</span></div></article>';
+    document.querySelectorAll(".tabs .update-badge")[0].textContent="NEW · v1.7.0";
+    document.querySelectorAll(".tabs .update-badge")[1].textContent="NEW · v1.7.0";
+    render("prototype");
+    const v170ReleaseList=document.querySelector(".release-list");
+    if(v170ReleaseList&&!v170ReleaseList.dataset.v170){v170ReleaseList.querySelectorAll(".tag").forEach(tag=>{if(tag.textContent==="LATEST UPDATE")tag.textContent="HISTORY"});v170ReleaseList.insertAdjacentHTML("afterbegin",publicReleaseNotesV170);v170ReleaseList.dataset.v170="true";}
+  </script>
 </body>
 </html>

@@ -1,21 +1,33 @@
 ---
 name: update-prd-from-prototype
-description: Update or generate a Chinese PRD from prototype screenshots, Axure/Figma exports, mind maps, or product-rule changes. Use when the user asks to create, supplement, revise, or polish requirements and needs to choose between a traditional `需求模块 / 原型截图 / 需求描述` three-column PRD and an integrated prototype-flow board containing screenshots, interaction arrows, and complete requirement cards. Trace every rule to current evidence and keep completeness checks internal.
+description: Create or update a Chinese PRD from prototype screenshots, Axure/Figma exports, mind maps, an existing PRD, or product-rule changes. Use for scoped requirement edits, screenshot synchronization, three-column PRDs, integrated prototype-flow boards, and explicit activity-logic validation. Preserve the current format when one already exists, trace rules to current evidence, and keep internal checks out of the formal PRD.
 ---
 
 # Update PRD From Prototype
 
 ## Overview
 
-Use this skill to revise an existing PRD from fresh prototype evidence or a new product-rule clarification. Support two presentation modes: `三列表格模式` and `一体画板模式`. Resolve the mode before drafting, preserve the latest PRD as the source of truth when one exists, and make only targeted updates.
+Use this skill to revise an existing PRD from fresh prototype evidence or a new product-rule clarification. Support two presentation modes: `三列表格模式` and `一体画板模式`. Preserve an existing mode automatically, use the latest PRD as the current baseline, and make only the requested changes.
+
+## Cross-model execution policy
+
+These rules are written to behave consistently on GPT-5 and GPT-6:
+
+- The user's latest explicit instruction takes precedence over this skill. Treat a request to create, update, fix, synchronize, or validate as authorization to do that work; do not stop after describing a plan.
+- Inspect the current artifact and complete all unambiguous, reversible work before asking a question. Ask only when a missing decision would change business scope, eligibility, scoring, time basis, rewards, settlement, destructive edits, or the requested output form.
+- Consolidate genuine blockers into one short question round. Do not ask for information already present in the current artifact, prior confirmed context, or a standing default in this skill.
+- A scoped edit stays scoped. Do not turn it into a full rewrite, full activity audit, new output mode, or external publication unless the user asks.
+- Apply only the gates relevant to the detected modules and requested deliverable. Examples and named historical patterns are guidance, not additional requirements for unrelated activities.
+- Calibrate verification to the change: perform focused readback for a small edit and full structural/render checks for a new document, format conversion, or integrated-board delivery. Once the relevant checks pass, finish instead of repeatedly rechecking.
+- Keep the user-facing response concise: lead with the completed artifact or concrete findings, then state changed scope, validation, and unresolved blockers only if any remain.
 
 Read `references/prd-output-modes.md` whenever creating a new PRD, changing its presentation mode, producing a Pencil board, or replacing a TAPD requirement table with a board image.
-When exporting or packaging an integrated Pencil board, also read `references/pencil-integrated-board-delivery.md`. It defines the mandatory 统一画板交付标准 delivery standard, the Pencil 8192-pixel export gate, full-size rendering, share-image compression, active-folder cleanup, and readback checks.
+When exporting or packaging an integrated Pencil board, also read `references/pencil-integrated-board-delivery.md`. It defines the mandatory ç»ä¸ç»æ¿äº¤ä»æ å delivery standard, the Pencil 8192-pixel export gate, full-size rendering, share-image compression, active-folder cleanup, and readback checks.
 
 For the family荣耀远征 / 守擂战 pattern, also read `references/family-glory-prd-pattern.md`.
 For guild/agent competitions or other complex Axure activities with multi-stage rankings, regional/global timing, live-room panels, invitation/assistance, or draws, treat `references/axure-activity-requirement-patterns.md` as the priority requirement reference. Reuse its completeness and interaction-writing patterns before considering looser generic patterns, but never inherit source-specific dates, thresholds, rank capacities, reward values, or frequency limits.
-For every activity-type PRD, also read `references/activity-prd-completeness.md`. Use it as an internal completeness audit inside the selected requirement surface; it must improve rule precision without forcing a presentation mode.
-The activity checklist also covers pursuit battles, elimination tournaments, PK variants, free/paid gift packs, inventory, 外部活动联动, activity-progress aggregation, startup pages, and home banners. Load only the matching checks and keep them internal.
+For activity-type PRDs, read only the relevant sections of `references/activity-prd-completeness.md`. During generation, apply the few hard gates needed to avoid unsupported boundary-changing rules. Run the full checklist only when the user explicitly asks to校验/检查活动逻辑；它不能强制改变呈现模式。
+The activity checklist also covers pursuit battles, elimination tournaments, PK variants, free/paid gift packs, inventory, å¤é¨æ´»å¨èå¨, activity-progress aggregation, startup pages, and home banners. Load only the matching checks and keep them internal.
 For the document-level heading structure of an activity PRD, also read `references/activity-prd-document-structure.md`. The document-level order remains `活动基础信息 → 活动对象 → 背景 → 思维导图 → 原型图 → 需求详情`; only the presentation inside `需求详情` changes by mode.
 
 <HARD-GATE>
@@ -38,21 +50,21 @@ Before drafting a new requirement detail or materially restructuring an existing
 - `三列表格模式`: module rows with `需求模块 / 原型截图 / 需求描述`.
 - `一体画板模式`: workflow-grouped prototype screenshots, operation-labelled arrows, and complete editable requirement cards on one Pencil board, with a downloadable board image when needed.
 
-If the user has not explicitly selected a mode and the requested change does not clearly preserve an existing mode, ask once and do not draft either format until answered. Never silently choose based on convenience. If the user explicitly requests both outputs, produce both from the same evidence map; otherwise keep one mode for the whole page-facing requirement scope.
+Resolve the mode from the current target before asking: preserve an existing three-column table or integrated board; for a new PRD, use the format explicitly requested or demonstrated by the user's example. Ask once only when no current format or usable example exists and both modes are genuinely plausible. Continue inspecting sources and preparing the evidence map before the answer. If the user explicitly requests both outputs, produce both from the same evidence map; otherwise keep one mode for the whole page-facing requirement scope.
 
 For `一体画板模式`, maintain one active master `.pen` file for the current requirement baseline. Back up the active file before material changes, then write the confirmed update back to the same master path. Do not leave `v2`, `v3`, `修正版`, or similarly named working boards in the active project root unless the user explicitly asks for parallel versions; move superseded variants to the project archive. A new formal state-count baseline may create one new master, but subsequent corrections stay in that master.
 
 For Pencil-based PRD delivery, use one current entry only: `00_最终交付/请使用_最新交付/最终交付包`. Keep its top-level order fixed as: `01_Pencil源文件与图片依赖` → `02_完整高清原图_不限大小` → `03_推荐分享_5MB内` → `04_备用分享_PNG_5MB内` → `05_快速预览` → `06_模块高清分图` → `07_QA检查图` → `README_交付说明.md`.
 
-For the full-board distribution image, follow the 统一画板交付标准 standard rather than relying on Pencil's built-in export. The standard board width is 11600 px unless the user has approved another established project baseline. If Pencil's export returns a longest edge of 8192 px, remains 8192 px after selecting 2x/3x, or makes page nodes unreadable at practical zoom, treat that export as a QA preview only. Render the saved `.pen` node tree at the approved full dimensions, preserving screenshot, arrow, card, and text geometry. Never upscale an 8192-pixel flattened export and present it as a full-resolution board.
+For the full-board distribution image, follow the ç»ä¸ç»æ¿äº¤ä»æ å standard rather than relying on Pencil's built-in export. The standard board width is 11600 px unless the user has approved another established project baseline. If Pencil's export returns a longest edge of 8192 px, remains 8192 px after selecting 2x/3x, or makes page nodes unreadable at practical zoom, treat that export as a QA preview only. Render the saved `.pen` node tree at the approved full dimensions, preserving screenshot, arrow, card, and text geometry. Never upscale an 8192-pixel flattened export and present it as a full-resolution board.
 
 Treat `01_Pencil源文件与图片依赖` as an inseparable bundle. It must contain exactly one active `.pen` source, its `01_状态图_46张` folder, every `screenshot-site*.png` asset, and all other images referenced by the `.pen`. Do not delete, rename, move, or split these dependencies independently. Before handoff, resolve every image URL relative to the `.pen` bundle and verify that every referenced file exists; otherwise Pencil may show `Missing dependencies` and images may disappear.
 
 Do not leave duplicate active `.pen` files, loose state images, loose screenshot dependencies, or multiple active “latest” folders. Move superseded versions, old exports, and root-level build outputs into `00_最终交付/历史备份/<timestamp>` instead of mixing them with the current package or silently deleting them.
 
-For any zero-cost benefit such as a free gift pack, free lottery ticket, or free reward, treat anti-abuse as a module-level hard gate. If the current source does not define anti-abuse, ask the user to choose or provide controls before drafting that module. Present device, IP, anti-scalper blacklist, and malicious-refund blacklist only as options; never select them automatically. Paid-only benefits do not trigger this gate unless they also contain a free claim or zero-cost path.
+For any zero-cost benefit such as a free gift pack, free lottery ticket, or free reward, treat anti-abuse as a module-level decision gate. If the current source does not define it, draft all unaffected content first, then ask one focused question before finalizing that module. Present device, IP, anti-scalper blacklist, and malicious-refund blacklist only as options; never select them automatically. Paid-only benefits do not trigger this gate unless they also contain a free claim or zero-cost path.
 
-Before drafting any activity PRD, resolve whether it integrates with each of these four capabilities: 外部活动联动, activity-progress aggregation, startup page, and home banner. Treat an explicit yes/no in the current source as resolved. If any are absent, ask about all unresolved capabilities in one compact round. Do not infer an integration or write its behavior without confirmation.
+When the source, existing PRD, prototype, or user request suggests external-surface integration, resolve only the relevant capabilities among å¤é¨æ´»å¨èå¨, activity-progress aggregation, startup page, and home banner. Reuse explicit yes/no evidence. Do not force this question set onto an unrelated activity, and do not infer integration behavior without confirmation.
 
 Keep negative integration confirmations internal by default. Do not create a generic `关联能力` section listing capabilities that are not connected. Write a confirmed integration into the PRD only when it is enabled and has product behavior to specify, or write an explicit non-integration only when the current document has a dedicated scope/configuration row or the user asks to record it.
 
@@ -81,7 +93,7 @@ Run this geometry pass internally before exporting any Pencil integrated board; 
 ## Workflow
 
 1. Ground in the latest artifact.
-   - Resolve and record `presentation_mode = three_column | integrated_board` before drafting. Ask: `这次需求详情用哪种呈现：三列表格，还是原型＋流程箭头＋需求卡的一体画板？`
+   - Resolve and record `presentation_mode = three_column | integrated_board` from the current artifact or explicit request. Ask `这次需求详情用哪种呈现：三列表格，还是原型＋流程箭头＋需求卡的一体画板？` only when the mode cannot be recovered from context.
    - If the target is TAPD and `presentation_mode = integrated_board`, also resolve `image_insertion_owner = assistant | user`. If the user will insert the image, leave one blank paragraph beneath the retained subsection heading and do not upload a placeholder.
    - Open the user-provided DOCX first; do not assume an older generated file is current.
    - Locate affected rows by module names such as `守擂奖励 / 弹层`, `轮播入口资源位`, `皇城 PK 秒杀`, `后台配置`.
@@ -90,8 +102,8 @@ Run this geometry pass internally before exporting any Pencil integrated board; 
    - Build the internal evidence map before drafting. Record the exact source for each proposed rule and mark unsupported completeness-check findings as questions, not PRD content.
    - Apply source priority consistently: explicit user correction/confirmation → latest PRD → explicit rule document or mind map → current prototype evidence. Use older files and bundled patterns only to detect conflicts or gaps.
    - For gift-scoring modules, prefill the confirmed default channel coverage in the evidence map, then replace or narrow it only when the current source explicitly does so.
-   - Resolve 外部活动联动, activity-progress aggregation, startup page, and home banner as four explicit yes/no decisions for every activity. Reuse current-source answers; otherwise ask once for the unresolved set before drafting.
-   - Detect every free or zero-cost benefit path. If anti-abuse is unresolved, pause only the affected module, ask for the applicable controls and limits, and continue only after confirmation.
+   - Resolve å¤é¨æ´»å¨èå¨, activity-progress aggregation, startup page, and home banner only when the current scope suggests those integrations. Reuse current-source answers and ask once only for relevant unresolved items.
+   - Detect every free or zero-cost benefit path. If anti-abuse is unresolved, finish the unaffected scope, then ask once for the controls and limits needed to finalize that module.
    - If no source document exists, create the canonical document-level headings, then render `需求详情` in the selected mode.
    - For an activity PRD, first establish or normalize the top-level structure using `activity-prd-document-structure.md`. If activity audience, blacklist, or version rules are currently embedded in a requirement row, migrate them to the independent `活动对象` section, remove the duplicate table wording, and renumber later top-level headings without changing their content.
    - When updating an existing PRD/TAPD from a current prototype folder, compare the target document images against the latest state-image directory or user-confirmed screenshots before editing. Flag old images, missing states, unreadable combined images, wrong image order, and stale captions.
@@ -115,7 +127,7 @@ Run this geometry pass internally before exporting any Pencil integrated board; 
    - Keep requirement cards dynamically sized from actual content. Do not use fixed heights that clip lines, and do not shrink body text merely to meet a canvas-height target.
    - For TAPD rich-text updates, preserve existing `/tfl/captures/...` images outside the target section. Upload/replace only the intended images, and after update verify no `data:image` remains in the saved description.
    - If a change affects玩法结构,核心逻辑,交互链路, or a batch of screenshots, update the top version-record table unless the user explicitly says not to. Keep the version row high-level: what changed, what is now synchronized, and whether PRD/TAPD/prototype/big board were changed. When the user names a target version, merge the change into that version and never auto-increment beyond it.
-   - If the user asks to highlight updates, confirm the intended scope first. Unless they specify otherwise, apply light-yellow highlighting only to text added or changed in the current update; do not color entire rows, screenshots, or unchanged copy.
+   - If the user asks to highlight updates without specifying a style, apply light-yellow highlighting only to text added or changed in the current update; do not pause for a style choice and do not color entire rows, screenshots, or unchanged copy.
 
 3. Update the affected module only.
    - In `三列表格模式`, replace or append text in the relevant `需求描述` cell.
@@ -148,7 +160,7 @@ Run this geometry pass internally before exporting any Pencil integrated board; 
      - `榜单奖励`: specify the target reward type, such as `公会区域榜奖励`, `公会全球榜奖励`, `用户榜奖励`, or `主播榜奖励`; for guild rewards, state whether the selected region/global type and faction tab follow the current榜单 context.
      - `奖池榜单` / `历史记录`: specify the current pool/period popup and the historical-record popup separately.
      - `获奖记录`: specify whether it is the current玩法 record, a global record, or a separate record for 神迹寻秘 / 神殿抽奖 / 众神祈福.
-   - When an activity panel displays rewards, confirm the reward-display design with the user before writing the formal PRD. Confirm: which rewards are shown, their ordering/grouping, how many appear in one view, and whether they use a carousel. If carousel is confirmed, also confirm direction, automatic vs manual switching, interval, looping, and swipe/next-prev support. Do not infer `轮播展示`, `自动切换`, `横向滑动`, or `展示全部奖励` from a static screenshot or common UI practice. If the reward content is confirmed but the display method is not, record the display method as pending confirmation and omit the unsupported interaction rule. This gate applies only to activity panels; do not automatically extend it to leaderboards, popups, banners, or ordinary reward previews.
+   - When the requested scope includes an activity panel that displays rewards, resolve which rewards are shown, ordering/grouping, single-view count, and whether a carousel exists. Reuse current evidence; if the display method is still missing and changes implementation, finish the supported parts and ask one consolidated question before finalizing that panel. If carousel is confirmed, also resolve direction, automatic vs manual switching, interval, looping, and swipe/next-prev support. Do not infer `轮播展示`, `自动切换`, `横向滑动`, or `展示全部奖励` from a static screenshot or common UI practice. This gate applies only to activity panels.
    - For live-room and panel actions, specify the concrete target only when evidenced. Examples of the required precision are: `去支持/去送礼` opens a confirmed gift panel and `去祈福` opens a confirmed gameplay page. Do not infer activity-gift priority, carried opportunities, or destination state from the control label alone.
    - For modal-only controls such as `活动规则`, `祈福规则`, `抽奖说明`, and reward previews, state that they are read-only popups if applicable and do not trigger settlement, reward delivery, draw/prayer/search actions, or progress changes.
    - For complex interaction updates, create or embed a compact interaction-chain matrix in the affected section when prose would be ambiguous. Use columns like `入口/按钮`, `所在页面`, `点击后打开`, `默认定位`, `关闭/返回`, and `是否改变筛选/进度/结算`.
@@ -170,12 +182,25 @@ Run this geometry pass internally before exporting any Pencil integrated board; 
    - Keep formulas as formulas when they express logic, e.g. `个人当日神令数 / 全服当日神令总数 * 当日奖池`; only replace configurable numeric constants with placeholders.
    - When rewards are involved, state whether they are automatic or manual, who receives them, and whether the display is preview, result, or settlement.
 
-5. Run the internal completeness and evidence audit.
+5. Run the internal evidence audit required for generation.
    - Keep review checks, audit lists, and validation steps outside the formal PRD table. Use them only to verify evidence coverage, state/data ownership, priority/conflict rules, stale-copy removal, and interaction destinations.
    - Confirm each final numbered statement has an evidence-map entry and that no checklist prompt was copied into the PRD as an invented rule.
    - Scan changed live-room display requirements for `符合条件`, `满足条件`, `不满足条件`, and `符合资格`. Keep such wording only when the same requirement explicitly defines the condition. Otherwise replace it with the direct unrestricted entry trigger and remove the unsupported eligible/ineligible branch.
    - Build a gameplay-time coverage list and verify every activity gameplay module names either global unified time or configured regional local time. Treat a module containing only `活动期间`, `每日`, `当天`, or `活动结束后` without an identifiable clock as incomplete and block delivery until the user confirms the time basis.
    - For subtraction changes, internally verify both removed and retained layers. Do not append this audit as `评审检查点` unless the user explicitly requests a separate review deliverable.
+
+### Explicit activity-logic validation mode
+
+Do not run the full activity-logic completeness checklist automatically after generating or updating a PRD. Enter this mode only when the user explicitly asks to `校验活动逻辑`、`检查活动是否完整`、`走查活动逻辑` or equivalent.
+
+When explicitly requested:
+
+1. Read the latest delivered PRD as the validation target and load only the checklist sections matching the detected activity modules.
+2. Build an internal matrix with `检查项 / 当前证据 / 状态 / 缺失决策 / 影响范围`. Classify findings as `已明确`, `待产品确认`, or `非阻塞补充`; do not turn checklist prompts or suggested options into product rules.
+3. Report a concise user-facing result first: covered items, items requiring confirmation, and optional improvements. Keep the detailed matrix internal unless the user asks to see it.
+4. Ask whether the user wants to补充/修订 the unresolved items. Do not edit the PRD in the same turn merely because gaps were found.
+5. Only after the user confirms the items to补充, ask any remaining boundary-changing questions, update the PRD using the normal evidence priority, and perform focused readback/validation.
+6. If the user declines an item, mark it internally as intentionally omitted and do not repeatedly raise the same point unless later requirements make the omission contradictory or impossible.
 
 6. Validate the DOCX.
    - Confirm table count, target row text, key phrases, and embedded media count with `python-docx`/zip inspection.
@@ -219,7 +244,7 @@ Run this geometry pass internally before exporting any Pencil integrated board; 
 - Write all current artifacts into the canonical `00_最终交付/请使用_最新交付/最终交付包`; do not create a second active delivery folder.
 - Preserve the fixed top-level order `01_Pencil源文件与图片依赖` through `07_QA检查图`, followed by `README_交付说明.md`.
 - Keep the `.pen`, `01_状态图_46张`, `screenshot-site*.png`, and all `.pen` image dependencies together inside `01_Pencil源文件与图片依赖`; validate all relative paths before sharing.
-- Use the 统一画板交付标准 output baseline from `references/pencil-integrated-board-delivery.md`: default to a 11600 px wide full board, derive height from actual content, and remove unused bottom canvas space before export.
+- Use the ç»ä¸ç»æ¿äº¤ä»æ å output baseline from `references/pencil-integrated-board-delivery.md`: default to a 11600 px wide full board, derive height from actual content, and remove unused bottom canvas space before export.
 - Export the full-resolution PNG from the saved `.pen` node tree first. Do not use a flattened screenshot, stitched preview, or Pencil's 8192-pixel-capped built-in export as the production source.
 - If the full board exceeds the requested limit, create a same-dimension share copy. For PNG use `python3 scripts/optimize_share_png.py <input.png> <output.png> --target-bytes 4900000`. When a full-dimension PNG cannot meet 5 MB without damaging readability, use a same-dimension JPEG with 4:4:4 chroma sampling and choose the highest quality that remains below 4,900,000 bytes.
 - Prefer the highest palette size that meets the target. Treat the optimized file as a share copy; retain or archive the lossless original.
@@ -270,4 +295,4 @@ Return only the final user-facing file links and a short summary:
 
 Return the selected output: either the traditional three-column PRD or the integrated board. Both modes must contain the same evidence-backed requirement completeness; the difference is presentation, not rule depth.
 
-After delivering the PRD draft, ask whether the user wants a Requirements Skill Suite review. Do not start that review without explicit approval.
+After delivering the PRD draft, do not automatically run the activity-logic completeness validation. Wait for the user to explicitly request校验/走查；校验完成后先询问是否要补充，再按确认结果修改 PRD。Do not start a broader Requirements Skill Suite review unless the user explicitly asks for it.

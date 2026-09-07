@@ -1,13 +1,32 @@
 ---
 name: activity-prototype-image2-workflow
-description: Generate complete low-fidelity activity prototype image sets from activity plan text, optional reference images, or an existing version folder. Use when the user asks to create an activity prototype, interaction-state flow, gameplay UI board, full set of state PNGs, gameplay mind map, image2 low-fidelity screens, or to revise an existing activity prototype. The required workflow is activity brief to prototype_blueprint.md plus mindmap.md to user confirmation to image2 state PNG generation to QA gates to HTML/board/preview/handoff delivery.
+description: Create or revise low-fidelity activity prototype images from an activity plan, reference images, or an existing version folder. Use for full prototype sets, focused state edits, activity panels, live-room popups, interaction flows, gameplay boards, mind maps, and Image2-based UI revisions. Confirm only material scope ambiguities, generate affected full-state PNGs with Image2, and deliver visible validated images plus the relevant board or handoff artifacts.
 ---
 
 # Activity Prototype Image2 Workflow
 
 ## Core Contract
 
-Generate complete activity prototype image sets, not only version-management artifacts. Start from the activity plan and produce a confirmed page/state blueprint before generating images. All single-state prototype PNGs must be generated or regenerated with image2, including main pages, popups, masks, dropdowns, banners, icons, ranking cards, reward cells, and revised UI regions. "Source-image-native reconstruction" means image2 using a confirmed source image as the baseline; it does not mean drawing the UI with code. Use scripts only for deterministic document initialization, checks, board stitching, file organization, size optimization, and QA boards. Never script-paint, canvas-draw, HTML/CSS-render, SVG-draw, PIL-compose, cover, patch, or manually paste the main UI or any single-state PNG content. If any visible semantic UI changes, regenerate the whole affected state with image2 from a clean source/baseline; do not paste a partial replacement over the old state.
+Generate the requested activity prototype images, not only version-management artifacts. For a new full set, start from the activity plan and resolve a page/state blueprint before generation; for a focused update, reuse the latest approved blueprint and baseline. All new or changed single-state prototype PNGs must be generated with image2, including main pages, popups, masks, dropdowns, banners, icons, ranking cards, reward cells, and revised UI regions. "Source-image-native reconstruction" means image2 using a confirmed source image as the baseline; it does not mean drawing the UI with code. Use scripts only for deterministic document initialization, checks, board stitching, file organization, size optimization, and QA boards. Never script-paint, canvas-draw, HTML/CSS-render, SVG-draw, PIL-compose, cover, patch, or manually paste the main UI or any single-state PNG content. If visible semantic UI changes, regenerate the whole affected state with image2 from a clean source/baseline; do not paste a partial replacement over the old state.
+
+## Cross-model execution policy
+
+Use this policy on GPT-5 and GPT-6:
+
+- The user's latest explicit instruction takes precedence over this skill. A request to create, revise, fix, continue, or deliver means perform the work; do not stop at a plan or capability statement.
+- Choose the smallest workflow that completes the request: `full_production` for a new complete activity, `focused_update` for named states/components, and `delivery_recovery` when an existing result is merely missing or invisible.
+- Reuse the latest approved blueprint, state list, baseline image, dimensions, and project rules. Do not ask the user to reconfirm unchanged facts.
+- Ask only when ambiguity would materially change the affected state list, business meaning, visual target, or replace a user-approved baseline. Complete source inspection, a proposed affected-state list, and other reversible preparation first; consolidate blockers into one short question round.
+- Never broaden a focused update into regeneration of unrelated states. Never run a full production checklist for delivery recovery.
+- Calibrate QA to scope: inspect every changed state and its relevant board placement; run the full count/package audit only for a full production run or when shared artifacts changed.
+- Once the requested images and applicable QA gates pass, deliver them visibly and finish. Do not regenerate merely to improve harmless pixel differences, and do not repeat checks without a new failure.
+- Keep the final response short and concrete: show the changed image or focused QA result, link the relevant board/files, and state what passed.
+
+### Workflow selection
+
+- `full_production`: create or materially redesign a complete activity set. Build/refresh the blueprint and mind map, resolve material scope gaps, generate module by module, then rebuild all delivery artifacts.
+- `focused_update`: change only the user-named states or the minimal affected state set. Reuse existing project documents, update only impacted rules/prompts, generate those full-state images, run focused QA, and rebuild only boards or handoff files that consume them.
+- `delivery_recovery`: recover the already generated/approved local or session image, validate it, and return the same visible file. Do not generate a new candidate or rebuild unrelated artifacts.
 
 ### Change-scope triage and localized regeneration
 
@@ -23,6 +42,37 @@ User-marked local generation may also be used for copy, button, or layout edits 
 
 Do not use pixel hashes, pixel-difference ratios, or exact bounding-box equality as a blocking acceptance gate unless the user explicitly requests pixel-level reproduction. These measurements may be recorded for diagnostics, but a user-approved candidate must not be regenerated merely because anti-aliasing, line weight, whitespace, icon rendering, or small proportional details differ. Once the user confirms that the visual effect and business structure are correct, promote that candidate and continue the logic/document synchronization instead of repeatedly redrawing it.
 
+### Activity-panel and live-room-popup image rules
+
+Classify activity panels and live-room popups before generation. They are different visual deliverables and must not be converted into one another.
+
+#### Activity panels
+
+- Generate an activity panel as an independent component board without the live-room background. Do not turn it into a full-height page.
+- Preserve the confirmed container structure and each state's recorded dimensions. Never stretch every panel to one width or height merely for board alignment. For the confirmed state family used as the current reference, states `52-54` are `325x335`, state `55` is `320x335`, state `56` is `315x335`, state `57` is `320x335`, and state `62` is `305x335`. Other projects must record and follow their own confirmed dimensions instead of inheriting these numbers blindly.
+- Replace only the panel's intended business content. Keep the outer container, corner radius, padding, title area, bottom action area, carousel arrows, and swipe indicator stable unless the user explicitly changes them.
+- Treat a pre-activity fallback panel such as state `62` as a separate placeholder state. After activity start, use only the confirmed audience or host content states; do not keep the fallback panel visible alongside active states.
+- Keep mutually exclusive content states mutually exclusive. User ranking, pass progress, and vault-key progress must not be merged into one panel unless the user explicitly requests a combined design. An existing-key entry may coexist only when the confirmed project rules allow it.
+- Hide an unavailable ranking or content block completely instead of leaving a blank reserved area, unless the approved reference explicitly shows an empty-state placeholder.
+- Keep action controls evidence-based. Buttons such as `送礼`, `去支持`, `去开启`, `去宝库`, or `求支持` may appear only in the confirmed states that own them; Image2 must not invent or copy them into other panels.
+- Place a new or revised panel state at its actual handoff point in the interaction flow. Do not append all new states to the end of the Pencil board or module board merely because they were created later.
+
+#### Live-room popups
+
+- Generate a live-room popup on the latest confirmed complete live-room parent page, not as an independent panel, half-screen sheet, or detached dialog board. For the confirmed reference family, states `58-61` use a complete `750x1624` parent page. Other projects must use their own approved full-page dimensions.
+- Preserve the parent page's header, live status, host/video area, chat area, gift area, bottom tools, and established room structure. The popup must sit within that page using the approved centered white-dialog treatment and recorded mask token.
+- Never generate a new popup on top of a parent image that already contains an old popup, old mask, dropdown, or stale overlay. Start from the latest approved clean parent page.
+- When the user marks only the popup region, lock the header, live-room structure, gift area, bottom tools, unchanged copy, and all content outside that region. Do not redraw, crop, replace, or restyle the parent page.
+- Preserve approved close, return, and destination-control treatments. Do not add extra buttons, tips, or confirmation controls unless the user explicitly requests them.
+
+#### Focused QA for panels and popups
+
+- For every changed panel or live-room popup, create a focused QA crop or comparison in addition to the complete state output. QA annotations may exist only in the review artifact, never in the formal state PNG.
+- Check for black borders, dirty shadows, clipping, text overlap, overflow, isolated punctuation, malformed Chinese, stale overlay content, and incorrect layer order.
+- For panels, verify the recorded state dimensions, stable container geometry, correct control ownership, and correct placement in the flow.
+- For live-room popups, verify the complete parent page, unchanged parent structure, consistent mask, centered dialog, and absence of popup-over-popup artifacts.
+- Treat the gate as: `Image2 full-state output -> local candidate -> dimension check -> view_image inspection -> focused QA -> formal promotion`. Do not promote or claim delivery before every step passes.
+
 ### Visual-to-logic synchronization gate
 
 When an accepted image change adds, removes, or changes a visible data-bearing or interactive element, the image update is not complete by itself. Before rebuilding the delivery board, update the active Pencil requirement card and synchronized requirement documents with the evidence-backed display condition, data definition, click destination, state-dependent behavior, and return-state preservation that the new element requires. Purely cosmetic corrections do not require invented product logic. Read back the editable Pencil card or its exported HTML to confirm the new keywords and rules are actually saved; do not rely only on an in-memory canvas screenshot.
@@ -35,7 +85,7 @@ When an accepted image change adds, removes, or changes a visible data-bearing o
 
 ## Default Deliverables
 
-Every complete run should produce:
+Every `full_production` run should produce:
 
 - single-state PNGs
 - `prototype_blueprint.md`
@@ -67,9 +117,9 @@ Use the original-size 8-column board as the default "big board" deliverable. Shr
 When the big board is meant for sharing, keep the original pixel dimensions and control the recommended file under the user's requested size limit when feasible. Do not reduce clarity by shrinking the board; create a same-size optimized delivery file and archive oversized originals.
 For dense multi-state boards, also keep a 50% high-clarity JPG preview under 5MB named like `推荐查看_50%高清预览_5M内.jpg`. This file is a standard share/preview deliverable, not a replacement for the HTML board or original-size clear PNG.
 
-If the user asks for a quick draft, still create `prototype_blueprint.md`, `mindmap.md`, `display_order.md`, and `handoff_summary.md`.
+For `focused_update`, deliver the changed full-state PNGs, focused QA, and only the existing board/docs affected by those states. For `delivery_recovery`, deliver the recovered visible image and its validation result. If the user asks for a quick new draft, create at least `prototype_blueprint.md`, `mindmap.md`, `display_order.md`, and `handoff_summary.md`.
 
-## Mandatory Workflow
+## Production Workflow
 
 1. **Read the activity input**
    - Gather activity plan text, gameplay rules, reward structures, ranking logic, reference images, previous version folders, user-provided `mindmap.md`, and style constraints.
@@ -85,12 +135,12 @@ If the user asks for a quick draft, still create `prototype_blueprint.md`, `mind
    - For guild/agent competitions or complex Axure activities with multi-stage rankings, regional/global states, live-room panels, draws, or invitation/assistance flows, treat `references/axure-activity-visual-patterns.md` as the priority state-coverage and board-composition reference. Reuse its structural and visual grammar, but do not inherit source-specific dates, thresholds, reward values, advancement counts, or frequency limits.
    - Before finalizing the blueprint for a matching activity, create a state-cluster matrix that covers active, future/Coming Soon, historical, eliminated, empty/unranked, blocking Toast, success/result feedback, and identity-owned panel/half-screen states. Mark genuinely inapplicable states instead of silently omitting them.
 
-3. **Get blueprint confirmation**
-   - Present the blueprint and mind map to the user for confirmation.
-   - Do not start batch state PNG generation until the user confirms the blueprint, unless they explicitly says to skip confirmation for a tiny draft.
+3. **Resolve blueprint scope**
+   - For a new `full_production` run, present a compact blueprint summary and affected-state list. Treat an explicit request to generate from a complete user-provided state list or approved blueprint as authorization to continue.
+   - Pause for confirmation only when unresolved scope would materially change the state count, module structure, business meaning, or generation cost. Do not require another confirmation for a `focused_update` whose target states and baseline are already clear.
 
 4. **Initialize project docs**
-   - After blueprint confirmation, create or update `display_order.md`, `prompts.md`, `global_rules.md`, `project_rules.md`, `version_rules.md`, `qa_gate.md`, and `handoff_summary.md`.
+   - After blueprint scope is resolved, create or update `display_order.md`, `prompts.md`, `global_rules.md`, `project_rules.md`, `version_rules.md`, `qa_gate.md`, and `handoff_summary.md` for a full production run. In a focused update, touch only the documents affected by the changed states.
    - Use `scripts/init_project_docs.py` when the blueprint follows the template.
    - Record the confirmed activity-gift name map, shared activity-header source/title/key visual/dimensions/placement, and six-category reward-placeholder manifest in `project_rules.md`. Carry version-specific replacements or overrides into `version_rules.md` without changing unrelated state numbering.
    - Before image generation, define a project-level popup mask token in `project_rules.md` and `version_rules.md`: color, opacity, blur/dim treatment, dialog shadow, close/confirm control style, and the source state it was copied from. If no approved source exists, use one explicit default for the whole version (`#000000` at `55%` opacity, no blur) and record it before the first popup. Do not let individual states invent their own mask color or opacity.
@@ -99,6 +149,8 @@ If the user asks for a quick draft, still create `prototype_blueprint.md`, `mind
    - Hard gate: create every single-state prototype PNG with image2. Do not use code, HTML/CSS screenshots, canvas/SVG, PIL, Photoshop-style patch scripts, or deterministic drawing as the generation path for any state PNG or changed UI region.
    - Image2 materialization gate: a successful generation response is not a completed state. Save the generated full-state image as a real local candidate under `04_素材源图与调试`, verify that the file exists and opens, then inspect it before touching the formal state directory. Never claim that a state was updated while the result exists only inside the tool response or conversation.
    - Required recovery path: when built-in `image_gen` returns base64 in the session record instead of a local path, identify the `image_generation_call` id and run `scripts/materialize_imagegen_result.py --session <rollout.jsonl> --image-id <ig_...> --out <candidate.png>`. The candidate is not deliverable until the script reports a saved path and dimensions, and `view_image` opens that exact path.
+   - **Session-record recovery is mandatory when the preview is missing or collapsed:** extract the base64 from the conversation/session record → materialize it to a real PNG file → run `view_image` on that exact file for visual validation → return the validated image through the app's image object/output channel. Do not return only a filesystem path, download link, tool-call trace, or text description. If the first image object is not visible in the conversation, copy the validated file to the workspace root with a simple filename and embed it in the final response with an absolute Markdown image path, then verify that the response contains a renderable image. This four-step chain (extract base64 → save → `view_image` → image-object/visible Markdown return) is a hard delivery gate, not an optional fallback.
+   - **Do not regenerate to solve a delivery/visibility failure:** if an image was already generated or approved and the user says `图呢`, `没回传`, `看不到`, `太糊`, or the preview is collapsed, do not call Image2/image_gen again and do not alter the design. Recover the existing session result or existing local PNG, validate it with `view_image`, and return that same original-resolution file. Generation is allowed only when the user explicitly requests a visual change or a new candidate.
    - If an image2 result does not expose a usable local file immediately, inspect the tool result and use the available image-generation output mechanism to persist it. Retry the image2 workflow when necessary; do not silently switch to PIL, HTML/CSS, patching, or text-only delivery.
    - Candidate promotion order is fixed: `image2 generates full state` → `candidate saved locally` → `dimensions verified` → `visual/semantic QA passed` → `old formal state archived` → `candidate promoted to formal state` → `board rebuilt` → `main board inspected` → `TAPD/PRD synchronized`. Do not reorder or skip these gates.
    - Do not update TAPD screenshots, requirement copy that claims the visual is complete, or delivery boards before the formal local state has passed the candidate gate.
@@ -140,7 +192,7 @@ If the user asks for a quick draft, still create `prototype_blueprint.md`, `mind
    - Inspect repeated reward placeholders and reward grid cells by category. The same category must use the same shared asset and sizing rules, and an unresolved category must use the recorded `通用奖励` asset.
    - Verify the root folder is clean, final files are under `00_最终交付`, state PNG count is correct under `01_状态图_xx张`, and HTML still resolves images.
    - Verify the main big board uses original state dimensions in an 8-column layout; do not deliver a thumbnail/compressed board as the main board.
-   - Before the final reply, directly show the changed single-state image or focused QA image and the rebuilt main big-board PNG. A file path or HTML link alone does not prove that the image2 result was promoted into the board.
+   - Before the final reply, directly show the changed single-state image or focused QA image and the rebuilt main big-board PNG. A file path or HTML link alone does not prove that the image2 result was promoted into the board. The final response must contain a renderable image/attachment; if the app shows only a collapsed preview or no image, do not claim delivery—re-materialize or copy the validated file to a simple workspace-root filename and resend it with an absolute Markdown image path until the image is visibly present.
    - Verify share-ready big boards by actual byte size when a size limit is required. If the original PNG exceeds the limit, provide a same-dimension optimized file as the recommended delivery and move the oversized original to archive.
 
 ## Resuming After Context Compression
