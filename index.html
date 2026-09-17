@@ -87,6 +87,21 @@
     if(v160ReleaseList&&!v160ReleaseList.dataset.v160){v160ReleaseList.querySelectorAll(".tag").forEach(tag=>{if(tag.textContent==="LATEST UPDATE")tag.textContent="HISTORY"});v160ReleaseList.insertAdjacentHTML("afterbegin",publicReleaseNotesV160);v160ReleaseList.dataset.v160="true";}
   </script>
   <script>
+    // v1.8.0 model-neutral capability and ownership update
+    skills.prototype.version="v1.8.0"; skills.prototype.updated="2026.09.16 更新";
+    skills.prototype.desc="专注于活动状态图、视觉 QA 与原型状态大画板。新版统一 GPT-5/GPT-6 的能力判断，按完整生产、局部更新或交付恢复保持最小影响范围。";
+    skills.prototype.steps=["确认实际可用能力","判断工作路径","复用干净基准","生成或恢复状态图","候选图晋级","可见 QA 交付"];
+    skills.prd.version="v1.8.0"; skills.prd.updated="2026.09.16 更新";
+    skills.prd.desc="只消费已确认原型，保持三列表格或 PRD 一体画板。新版统一 GPT-5/GPT-6 的工具能力判断、职责边界和固定走查格式。";
+    skills.prd.steps=["读取当前证据","确认交付模式","锁定需求边界","使用实际可用工具","更新目标模块","回读验证交付"];
+    const publicReleaseNotesV180='<article class="release-item"><time>2026.09.16</time><div><h3>模型能力与职责边界优化 · v1.8.0</h3><ul><li>两套 Skill 明确分工：活动原型生成负责状态图与视觉交付；原型驱动 PRD 只消费已确认原型并产出需求内容。</li><li>GPT-5、GPT-6 及后续模型均以实际可调用工具、插件和权限为准，不假设特定图片模型或参数存在。</li><li>活动原型生成强化完整生产、局部更新、交付恢复及可选标注能力的正式交付边界。</li><li>原型驱动 PRD 固定三列表格、PRD 一体画板与活动走查格式，继续采用证据优先和回读验证。</li></ul><span class="tag">LATEST UPDATE</span></div></article>';
+    document.querySelectorAll(".tabs .update-badge")[0].textContent="NEW · v1.8.0";
+    document.querySelectorAll(".tabs .update-badge")[1].textContent="NEW · v1.8.0";
+    render("prototype");
+    const v180ReleaseList=document.querySelector(".release-list");
+    if(v180ReleaseList&&!v180ReleaseList.dataset.v180){v180ReleaseList.querySelectorAll(".tag").forEach(tag=>{if(tag.textContent==="LATEST UPDATE")tag.textContent="HISTORY"});v180ReleaseList.insertAdjacentHTML("afterbegin",publicReleaseNotesV180);v180ReleaseList.dataset.v180="true";}
+  </script>
+  <script>
     // v1.7.0 GPT-5 / GPT-6 compatibility update
     skills.prototype.version="v1.7.0"; skills.prototype.updated="2026.09.07 更新";
     skills.prototype.desc="从完整活动或现有状态出发，按请求选择完整生产、局部更新或交付恢复。新版面向 GPT-5 与 GPT-6 优化执行顺序，减少重复确认、无关重做和过度验证。";
